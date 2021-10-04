@@ -1,0 +1,26 @@
+package endpoint
+
+import (
+	"context"
+
+	"github.com/go-kit/kit/endpoint"
+)
+
+type {{ pascalize .Name }}Endpoints struct {
+	{{ range .Operations }}
+	{{ pascalize .Name }}Endpoint endpoint.Endpoint{{ end }}
+}
+
+func Make{{ pascalize .Name }}Endpoints(s domain.{{ pascalize .Name }}Service) {{ pascalize .Name }}Endpoints {
+	return {{ pascalize .Name }}Endpoints{{"{"}}{{ range .Operations }}
+			{{ pascalize .Name }}Endpoint: Make{{ pascalize .Name }}Endpoint(s),{{ end }}
+	}
+}
+
+{{ range .Operations }}
+type {{ .Name }}Request struct {
+	{{ range .Params }}
+		{{ pascalize .Name }}
+	{{ end }}
+}
+{{ end}}
