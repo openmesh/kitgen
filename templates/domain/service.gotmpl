@@ -5,11 +5,6 @@ import (
 )
 
 type {{ pascalize .Name }}Service interface {
-	{{ range .Operations }}{{ pascalize .Name }}(ctx context.Context, req {{ pascalize .Name }}Request) {{ pascalize .Name }}Response
-	{{ end }}
-}
-
-type {{ pascalize .Name }}Service interface {
-	{{ range .Operations }}{{ pascalize .Name }}(ctx context.Context{{ range .Params }}, {{ .Name }} {{ .GoType }}{{ end }}) {{ if .SuccessResponse.Schema }} {{ .SuccessResponse.Schema.GoType }}{{ end }}, error
+	{{ range .Operations }}{{ pascalize .Name }}(ctx context.Context{{ range .Params }}, {{ varname .Name }} {{ stripPackage .GoType }}{{ end }}) {{ if .SuccessResponse }}{{ if .SuccessResponse.Schema }}({{ stripPackage .SuccessResponse.Schema.GoType }},{{ end }}{{ end }} error{{ if .SuccessResponse }}{{ if .SuccessResponse.Schema }}){{ end }}{{ end }}
 	{{ end }}
 }

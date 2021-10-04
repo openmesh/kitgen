@@ -2,6 +2,7 @@ package endpoint
 
 import (
 	"github.com/go-kit/kit/endpoint"
+	"github.com/openmesh/kitgen/domain"
 )
 
 type PetEndpoints struct {

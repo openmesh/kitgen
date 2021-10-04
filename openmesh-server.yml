@@ -25,11 +25,11 @@ layout:
   #     source: asset:serverDoc
   #     target: "{{ joinFilePath .Target .ServerPackage }}"
   #     file_name: "doc.go"
-  # models:
-  #   - name: definition
-  #     source: asset:model
-  #     target: "{{ joinFilePath .Target .ModelPackage }}"
-  #     file_name: "{{ (snakize (pascalize .Name)) }}.go"
+  models:
+    - name: entity
+      source: asset:domainEntity
+      target: '{{ joinFilePath .Target .ModelPackage }}'
+      file_name: '{{ (snakize (pascalize .Name)) }}.go'
   # operations:
   #   - name: parameters
   #     source: asset:serverParameter
@@ -47,8 +47,12 @@ layout:
     - name: endpoint
       source: asset:endpoint
       target: ./endpoint
-      file_name: "{{ (snakize (pascalize .Name)) }}.go"
+      file_name: '{{ (snakize (pascalize .Name)) }}.go'
     - name: domain_service
       source: asset:domainService
       target: ./domain
-      file_name: "{{ (snakize (pascalize .Name )) }}_service.go"
+      file_name: '{{ (snakize (pascalize .Name )) }}_service.go'
+    - name: log
+      source: asset:log
+      target: ./log
+      file_name: '{{ (snakize (pascalize .Name )) }}.go'
