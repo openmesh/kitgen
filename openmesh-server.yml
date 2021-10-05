@@ -56,3 +56,7 @@ layout:
       source: asset:log
       target: ./log
       file_name: '{{ (snakize (pascalize .Name )) }}.go'
+    - name: metrics
+      source: asset:metrics
+      target: ./metrics
+      file_name: '{{ (snakize (pascalize .Name )) }}.go'

@@ -18,37 +18,49 @@ type storeLoggingMiddleware struct {
 	next   domain.StoreService
 }
 
-func (mw *deleteOrderLoggingMiddleware) DeleteOrder(ctx context.Context, orderID int64) (err error) {
-	defer func(beging time.Time) {
+func (mw *storeLoggingMiddleware) DeleteOrder(ctx context.Context, orderId int64) (err error) {
+	defer func(begin time.Time) {
 		_ = mw.logger.Log(
 			"method", "delete_order",
 			"orderId", orderId,
+			"took", time.Since(begin),
+			"error", err,
 		)
-	}()
+	}(time.Now())
+	return mw.next.DeleteOrder(ctx, orderId)
 }
 
-func (mw *getInventoryLoggingMiddleware) GetInventory(ctx context.Context) (getInventoryOK map[string]int32, err error) {
-	defer func(beging time.Time) {
+func (mw *storeLoggingMiddleware) GetInventory(ctx context.Context) (_ map[string]int32, err error) {
+	defer func(begin time.Time) {
 		_ = mw.logger.Log(
 			"method", "get_inventory",
+			"took", time.Since(begin),
+			"error", err,
 		)
-	}()
+	}(time.Now())
+	return mw.next.GetInventory(ctx)
 }
 
-func (mw *getOrderByIdLoggingMiddleware) GetOrderByID(ctx context.Context, orderID int64) (getOrderByIdOK domain.Order, err error) {
-	defer func(beging time.Time) {
+func (mw *storeLoggingMiddleware) GetOrderByID(ctx context.Context, orderId int64) (_ domain.Order, err error) {
+	defer func(begin time.Time) {
 		_ = mw.logger.Log(
 			"method", "get_order_by_id",
 			"orderId", orderId,
+			"took", time.Since(begin),
+			"error", err,
 		)
-	}()
+	}(time.Now())
+	return mw.next.GetOrderByID(ctx, orderId)
 }
 
-func (mw *placeOrderLoggingMiddleware) PlaceOrder(ctx context.Context, body Order) (placeOrderOK domain.Order, err error) {
-	defer func(beging time.Time) {
+func (mw *storeLoggingMiddleware) PlaceOrder(ctx context.Context, body domain.Order) (_ domain.Order, err error) {
+	defer func(begin time.Time) {
 		_ = mw.logger.Log(
 			"method", "place_order",
 			"body", body,
+			"took", time.Since(begin),
+			"error", err,
 		)
-	}()
+	}(time.Now())
+	return mw.next.PlaceOrder(ctx, body)
 }

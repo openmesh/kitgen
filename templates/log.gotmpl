@@ -19,13 +19,15 @@ type {{ .Name }}LoggingMiddleware struct {
 }
 
 {{ range .Operations }}
-func (mw *{{ .Name }}LoggingMiddleware) {{ pascalize .Name }}(ctx context.Context{{ range .Params }}, {{ varname .Name }} {{ stripPackage .GoType }}{{ end }}) ({{ if .SuccessResponse }}{{ if .SuccessResponse.Schema }}{{ .SuccessResponse.Name }} {{ .SuccessResponse.Schema.GoType }},{{ end }}{{ end }} err error) {
-	defer func(beging time.Time) {
+func (mw *{{ $.Name }}LoggingMiddleware) {{ pascalize .Name }}(ctx context.Context{{ range .Params }}, {{ .Name }} {{ .GoType }}{{ end }}) ({{ if .SuccessResponse }}{{ if .SuccessResponse.Schema }}_ {{ .SuccessResponse.Schema.GoType }},{{ end }}{{ end }} err error) {
+	defer func(begin time.Time) {
 		_ = mw.logger.Log(
 			"method", "{{ (snakize (pascalize .Name)) }}",{{ range .Params }}
 			"{{ .Name }}", {{ .Name }},{{ end }}
-
+			"took", time.Since(begin),
+			"error", err,
 		)
-	}()
+	}(time.Now())
+	return mw.next.{{ pascalize .Name}}(ctx{{ range .Params }}, {{ .Name }}{{ end }})
 }
 {{ end }}
