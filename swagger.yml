@@ -54,7 +54,7 @@ paths:
             $ref: '#/definitions/Pet'
       responses:
         200:
-          description: successful operation
+          description: pet
           schema:
             $ref: '#/definitions/Pet'
         405:
@@ -124,9 +124,7 @@ paths:
         200:
           description: successful operation
           schema:
-            type: array
-            items:
-              $ref: '#/definitions/Pet'
+            $ref: '#/definitions/ListPetsResponse'
         400:
           description: Invalid status value
       security:
@@ -724,6 +722,15 @@ definitions:
           - sold
     xml:
       name: Pet
+  ListPetsResponse:
+    type: object
+    properties:
+      pets:
+        type: array
+        items:
+          $ref: '#/definitions/Pet'
+      totalItems:
+        type: integer
   ApiResponse:
     type: object
     properties:
